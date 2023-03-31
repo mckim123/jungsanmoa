@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -50,7 +49,7 @@ public class JungsanReport {
             int rounded = (int) Math.ceil(remaining / roundingUnit) * roundingUnit;
             double increased = rounded - remaining;
             roundedRemainings.add(rounded);
-            increasedValues.add(remaining);
+            increasedValues.add(increased);
         }
 
         int DecreasingCount = roundedRemainings.stream().mapToInt(Integer::intValue).sum() / roundingUnit;

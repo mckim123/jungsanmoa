@@ -21,7 +21,7 @@ public class Members {
         Map<String, Double> divisions = expenseDetail.getDivisions();
         for (Member member : members) {
             String name = member.getName();
-            if (name == expenseDetail.getPayer()) {
+            if (expenseDetail.getPayer().equals(name)) {
                 member.addActualPayment(expenseDetail.getAmount());
             }
             if (participants.contains(name)) {
