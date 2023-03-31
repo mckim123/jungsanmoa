@@ -27,6 +27,7 @@ public class JungsanReport {
     private void addExpense(Expense expense) {
         ExpenseDetail expenseDetail = new ExpenseDetail(expense);
         expenseDetails.add(expenseDetail);
+        members.applyExpenseDetail(expenseDetail);
     }
 
     private void applyAdvancedTransfer(AdvanceTransfer getAdvanceTransfer) {

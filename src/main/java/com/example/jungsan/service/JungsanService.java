@@ -10,9 +10,7 @@ public class JungsanService {
     public JungsanReport produceReport(JungsanRequest request) {
         Members members = new Members(request.getMembers());
         JungsanReport report = new JungsanReport(members);
-
         report.fill(request);
-
         return report;
     }
 }
