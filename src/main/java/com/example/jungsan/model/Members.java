@@ -1,5 +1,6 @@
 package com.example.jungsan.model;
 
+import com.example.jungsan.dto.AdvanceTransfer;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,6 +24,19 @@ public class Members {
             }
             if (participants.contains(name)) {
                 member.addActualDivision(divisions.get(name));
+            }
+        }
+    }
+
+    public void applyAdvancedTransfer(AdvanceTransfer advanceTransfer) {
+        int amount = advanceTransfer.getAmount();
+        for (Member member : members) {
+            String name = member.getName();
+            if (advanceTransfer.from(name)) {
+                member.addAdvancedTransfer(amount);
+            }
+            if (advanceTransfer.to(name)) {
+                member.addAdvancedReceived(amount);
             }
         }
     }

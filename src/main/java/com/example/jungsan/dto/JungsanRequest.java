@@ -9,6 +9,6 @@ public class JungsanRequest {
     private List<String> members;
     private List<Expense> expenses;
     private TruncationOption truncationOption;
-    private AdvanceTransfer advanceTransfer;
+    private List<AdvanceTransfer> advanceTransfers;
 
 }

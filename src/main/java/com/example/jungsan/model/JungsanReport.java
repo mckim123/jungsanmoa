@@ -12,10 +12,12 @@ import lombok.RequiredArgsConstructor;
 public class JungsanReport {
     private final Members members;
     private final List<ExpenseDetail> expenseDetails = new ArrayList<>();
+    private List<AdvanceTransfer> advanceTransfers;
 
     public void fill(JungsanRequest request) {
         addExpenses(request.getExpenses());
-        applyAdvancedTransfer(request.getAdvanceTransfer());
+        this.advanceTransfers = request.getAdvanceTransfers();
+        applyAdvancedTransfers();
         truncateRemaining(request.getTruncationOption());
         determineTransfers();
     }
@@ -30,8 +32,8 @@ public class JungsanReport {
         members.applyExpenseDetail(expenseDetail);
     }
 
-    private void applyAdvancedTransfer(AdvanceTransfer getAdvanceTransfer) {
-        //TODO
+    private void applyAdvancedTransfers() {
+        advanceTransfers.forEach(members::applyAdvancedTransfer);
     }
 
     private void truncateRemaining(TruncationOption truncationOption) {
