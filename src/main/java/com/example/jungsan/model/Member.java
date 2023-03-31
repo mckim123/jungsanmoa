@@ -1,7 +1,9 @@
 package com.example.jungsan.model;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public class Member {
     private final String name;
