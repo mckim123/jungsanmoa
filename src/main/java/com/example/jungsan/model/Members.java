@@ -2,6 +2,7 @@ package com.example.jungsan.model;
 
 import com.example.jungsan.dto.AdvanceTransfer;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,9 +50,21 @@ public class Members {
         return members.stream().map(Member::calculateRemaining).collect(Collectors.toList());
     }
 
-    public void applyTruncateRemaining(List<Integer> roundedRemainings) {
+    public void applyRoundedRemaining(List<Integer> roundedRemainings) {
         for (int i = 0; i < members.size(); i++) {
-            members.get(i).setTruncatedRemaining(roundedRemainings.get(i));
+            members.get(i).setRoundedRemaining(roundedRemainings.get(i));
         }
+    }
+
+    public Map<String, Integer> getRoundedRemainings() {
+        Map<String, Integer> roundedRemainings = new HashMap<>();
+        for (int i = 0; i < members.size(); i++) {
+            Member member = members.get(i);
+            int roundedRemaining = member.getRoundedRemaining();
+            if (roundedRemaining != 0) {
+                roundedRemainings.put(member.getName(), roundedRemaining);
+            }
+        }
+        return roundedRemainings;
     }
 }

@@ -12,7 +12,7 @@ public class Member {
     private int totalAdvancedTransfer = 0;
     private int totalAdvancedReceived = 0;
     private double remaining;
-    private int truncatedRemaining;
+    private int roundedRemaining;
 
     public void addActualPayment(int payment) {
         totalActualPayment += payment;
@@ -39,7 +39,7 @@ public class Member {
         return name;
     }
 
-    public void setTruncatedRemaining(int remaining) {
-        truncatedRemaining = remaining;
+    public void setRoundedRemaining(int remaining) {
+        roundedRemaining = remaining;
     }
 }
