@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class ExpenseDetail {
+public class Expense {
 
     private final String payer;
     private final List<String> participants;

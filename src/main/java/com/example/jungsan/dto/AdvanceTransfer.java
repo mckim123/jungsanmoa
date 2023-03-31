@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class AdvancePayment {
+public class AdvanceTransfer {
 
     private final String from;
     private final String to;

@@ -7,8 +7,8 @@ import lombok.Getter;
 public class JungsanRequest {
 
     private List<String> members;
-    private List<ExpenseDetail> expenseDetails;
+    private List<Expense> expenses;
     private TruncationOption truncationOption;
-    private AdvancePayment advancePayment;
+    private AdvanceTransfer advanceTransfer;
 
 }
