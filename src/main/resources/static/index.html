@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Jungsan</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="container">
+    <h1>Jungsan Calculator</h1>
+    <form id="jungsan-form">
+        <div class="form-group">
+            <label for="total-amount">Total Amount:</label>
+            <input type="number" id="total-amount" name="total-amount" required/>
+        </div>
+        <div class="form-group">
+            <label for="member-count">Number of Members:</label>
+            <input type="number" id="member-count" name="member-count" required/>
+        </div>
+        <div class="form-group">
+            <label for="truncation">Truncation:</label><br/>
+            <input type="radio" id="truncation-1" name="truncation" value="1" checked/>
+            <label for="truncation-1">1</label><br/>
+            <input type="radio" id="truncation-10" name="truncation" value="10"/>
+            <label for="truncation-10">10</label><br/>
+            <input type="radio" id="truncation-100" name="truncation" value="100"/>
+            <label for="truncation-100">100</label><br/>
+            <input type="radio" id="truncation-1000" name="truncation" value="1000"/>
+            <label for="truncation-1000">1000</label>
+        </div>
+        <div class="form-group">
+            <label for="paid-by">Paid By:</label>
+            <select id="paid-by" name="paid-by" required>
+                <option value="" disabled selected>Select an option</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="members">Members:</label>
+            <div id="members" class="checkbox-group"></div>
+        </div>
+        <button type="submit">Calculate</button>
+    </form>
+    <div id="jungsan-result"></div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
