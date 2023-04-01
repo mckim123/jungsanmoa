@@ -1,14 +1,16 @@
 package com.example.jungsan.dto;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Expense {
 
-    private final String payer;
-    private final List<String> participants;
-    private final int amount;
+    private String payer;
+    private List<String> participants;
+    private int amount;
 }

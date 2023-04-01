@@ -1,15 +1,17 @@
 package com.example.jungsan.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class AdvanceTransfer {
 
-    private final String from;
-    private final String to;
-    private final int amount;
+    private String from;
+    private String to;
+    private int amount;
 
     public boolean from(String name) {
         return from.equals(name);

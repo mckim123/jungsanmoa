@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,9 @@ public class JungsanReport {
     }
 
     private void applyAdvancedTransfers() {
-        advanceTransfers.forEach(members::applyAdvancedTransfer);
+        if (Objects.nonNull(advanceTransfers)) {
+            advanceTransfers.forEach(members::applyAdvancedTransfer);
+        }
     }
 
     private void roundRemainings(TruncationOption truncationOption) {
