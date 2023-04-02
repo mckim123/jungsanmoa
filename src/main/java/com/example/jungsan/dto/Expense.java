@@ -13,4 +13,6 @@ public class Expense {
     private String payer;
     private List<String> participants;
     private int amount;
+    private String description;
+    
 }

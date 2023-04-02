@@ -11,6 +11,10 @@ public class SacrificialTransferPlanner implements TransferPlanner {
     public List<Transfer> plan(Map<String, Integer> roundedRemainings) {
         List<Transfer> transfers = new ArrayList<>();
 
+        if (roundedRemainings.isEmpty()) {
+            return transfers;
+        }
+
         Set<String> names = roundedRemainings.keySet();
         String sacrifice = names.stream().skip((int) (names.size() * Math.random())).findFirst().get();
 

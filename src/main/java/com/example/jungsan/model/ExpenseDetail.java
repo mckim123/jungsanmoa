@@ -10,6 +10,7 @@ import lombok.Getter;
 public class ExpenseDetail {
     private final List<String> participants;
     private final String payer;
+    private final String description;
     private final int amount;
     private final Map<String, Double> divisions;
 
@@ -17,6 +18,7 @@ public class ExpenseDetail {
         this.participants = expense.getParticipants();
         this.payer = expense.getPayer();
         this.amount = expense.getAmount();
+        this.description = expense.getDescription();
         divisions = new HashMap<>();
         calculateDivisions();
     }
