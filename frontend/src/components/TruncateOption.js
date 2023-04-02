@@ -28,7 +28,7 @@ function TruncateOption(props) {
     };
 
     return (
-        <div style={{display: "flex", alignItems: "center"}}>
+        <div style={{display: "flex", alignItems: "center", marginBottom: "3rem"}}>
             <FormControl>
                 <InputLabel shrink>단위</InputLabel>
                 <Select value={value} onChange={handleChange} displayEmpty>

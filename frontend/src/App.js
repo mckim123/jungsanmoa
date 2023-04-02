@@ -1,11 +1,13 @@
 import React, {useState} from "react";
 import axios from "axios";
-import {CssBaseline, Typography} from "@mui/material";
+import {CssBaseline, Divider, Typography} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import Members from "./components/Members";
 import ExpenseInput from "./components/ExpenseInput";
 import TruncateOption from "./components/TruncateOption";
 import JungsanReport from './components/JungsanReport';
+
+const API_ENDPOINT = "/"
 
 const HeadingContainer = styled("div")({
     textAlign: "center",
@@ -93,7 +95,7 @@ function App() {
         };
 
         axios
-            .post("http://localhost:8080", data)
+            .post(API_ENDPOINT, data)
             .then((response) => {
                 setJungsanData(response.data);
             })
@@ -128,7 +130,7 @@ function App() {
                 <TruncateOption onSubmit={handleSubmit}/>
                 {jungsanData && (
                     <>
-                        <hr/>
+                        <Divider sx={{width: "100%"}}/>
                         <JungsanReport data={jungsanData}/>
                     </>
                 )}

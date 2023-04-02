@@ -11,6 +11,8 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Grid from '@mui/material/Grid';
 
+import html2canvas from 'html2canvas';
+
 function JungsanReport({data}) {
     const {members, expenseDetails, advanceTransfers, transfers} = data;
     const [showDetails, setShowDetails] = useState(false);
@@ -38,8 +40,17 @@ function JungsanReport({data}) {
         setSelectedRadio(event.target.value);
     };
 
+    const handleExportClick = () => {
+        html2canvas(document.getElementById("jungsan-report")).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'jungsan-report.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    };
+
     return (
-        <div style={{width: '90%', margin: 'auto', marginTop: '3rem', marginBottom: '7rem'}}>
+        <div id="jungsan-report" style={{width: '90%', margin: 'auto', marginTop: '3rem', marginBottom: '7rem'}}>
             <h3 style={{textAlign: 'center', fontSize: '1.8rem'}}>정산 결과</h3>
             <p style={{textAlign: 'center', fontSize: '1rem'}}>반올림 금액이 -인 경우 받아야하는 금액입니다.</p>
             <Table style={{margin: 'auto', fontSize: '1.3em'}}>
@@ -201,6 +212,10 @@ function JungsanReport({data}) {
                     ))}
                 </TableBody>
             </Table>
+
+            <Button onClick={handleExportClick} style={{display: 'block', margin: 'auto', fontSize: '1rem'}}>
+                Export to Image (현재 보고 있는 화면이 출력됩니다.)
+            </Button>
         </div>)
 }
 
