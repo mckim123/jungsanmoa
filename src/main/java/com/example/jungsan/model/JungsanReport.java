@@ -3,11 +3,15 @@ package com.example.jungsan.model;
 import com.example.jungsan.dto.AdvanceTransfer;
 import com.example.jungsan.dto.Expense;
 import com.example.jungsan.dto.JungsanRequest;
+import com.example.jungsan.dto.Transfer;
 import com.example.jungsan.dto.TruncationOption;
+import com.example.jungsan.transferplanner.TransferPlanner;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +22,16 @@ public class JungsanReport {
     private final Members members;
     private final List<ExpenseDetail> expenseDetails = new ArrayList<>();
     private List<AdvanceTransfer> advanceTransfers;
+    private List<Transfer> transfers;
+
+    @JsonIgnore
+    private final TransferPlanner transferPlanner;
 
     public void fill(JungsanRequest request) {
         addExpenses(request.getExpenses());
         this.advanceTransfers = request.getAdvanceTransfers();
         applyAdvancedTransfers();
-        truncateRemaining(request.getTruncationOption());
+        roundRemainings(request.getTruncationOption());
         determineTransfers();
     }
 
@@ -38,10 +46,12 @@ public class JungsanReport {
     }
 
     private void applyAdvancedTransfers() {
-        advanceTransfers.forEach(members::applyAdvancedTransfer);
+        if (Objects.nonNull(advanceTransfers)) {
+            advanceTransfers.forEach(members::applyAdvancedTransfer);
+        }
     }
 
-    private void truncateRemaining(TruncationOption truncationOption) {
+    private void roundRemainings(TruncationOption truncationOption) {
         int roundingUnit = truncationOption.getValue();
         List<Double> remainings = members.getRemainings();
         List<Integer> roundedRemainings = new ArrayList<>();
@@ -61,7 +71,7 @@ public class JungsanReport {
             increasedValues.set(i, increasedValues.get(i) - roundingUnit);
         });
 
-        members.applyTruncateRemaining(roundedRemainings);
+        members.applyRoundedRemaining(roundedRemainings);
     }
 
     private Set<Integer> determineDecreasingIndices(List<Double> increasedValues, int count) {
@@ -79,6 +89,6 @@ public class JungsanReport {
     }
 
     private void determineTransfers() {
-        //TODO
+        transfers = transferPlanner.plan(members.getRoundedRemainings());
     }
 }
