@@ -33,6 +33,7 @@ public class JungsanReport {
         applyAdvancedTransfers();
         roundRemainings(request.getTruncationOption());
         determineTransfers();
+        members.sort();
     }
 
     private void addExpenses(List<Expense> expenses) {

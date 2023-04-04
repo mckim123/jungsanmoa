@@ -1,7 +1,9 @@
 package com.example.jungsan.model;
 
 import com.example.jungsan.dto.AdvanceTransfer;
+import com.example.jungsan.dto.SplitOption;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +28,18 @@ public class Members {
             String name = member.getName();
             if (expenseDetail.getPayer().equals(name)) {
                 member.addActualPayment(expenseDetail.getAmount());
+                if (SplitOption.DONE.equals(expenseDetail.getSplitOption())) {
+                    member.addAdvancedReceived(divisions.get(name) * (divisions.size() - 1));
+                }
+                if (SplitOption.TREAT.equals(expenseDetail.getSplitOption())) {
+                    member.addActualDivision(expenseDetail.getAmount());
+                }
             }
-            if (participants.contains(name)) {
+            if (participants.contains(name) && !SplitOption.TREAT.equals(expenseDetail.getSplitOption())) {
                 member.addActualDivision(divisions.get(name));
+                if (SplitOption.DONE.equals(expenseDetail.getSplitOption()) && !expenseDetail.getPayer().equals(name)) {
+                    member.addAdvancedTransfer(divisions.get(name));
+                }
             }
         }
     }
@@ -66,5 +77,9 @@ public class Members {
             }
         }
         return roundedRemainings;
+    }
+
+    public void sort() {
+        members.sort(Comparator.comparing(Member::getName));
     }
 }

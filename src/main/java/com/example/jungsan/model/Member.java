@@ -9,8 +9,8 @@ public class Member {
     private final String name;
     private int totalActualPayment = 0;
     private double totalActualDivision = 0d;
-    private int totalAdvancedTransfer = 0;
-    private int totalAdvancedReceived = 0;
+    private double totalAdvancedTransfer = 0d;
+    private double totalAdvancedReceived = 0d;
     private double remaining;
     private int roundedRemaining;
 
@@ -22,16 +22,17 @@ public class Member {
         totalActualDivision += division;
     }
 
-    public void addAdvancedTransfer(int transfer) {
+    public void addAdvancedTransfer(double transfer) {
         totalAdvancedTransfer += transfer;
     }
 
-    public void addAdvancedReceived(int received) {
+    public void addAdvancedReceived(double received) {
         totalAdvancedReceived += received;
     }
 
     public double calculateRemaining() {
         remaining = totalActualDivision - totalActualPayment - totalAdvancedTransfer + totalAdvancedReceived;
+        remaining = Math.round(remaining * 100) / 100.0;
         return remaining;
     }
 
