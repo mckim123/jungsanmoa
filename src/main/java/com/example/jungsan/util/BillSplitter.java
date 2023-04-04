@@ -4,11 +4,13 @@ import com.example.jungsan.dto.Expense;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BillSplitter {
     public static Map<String, Double> splitBills(Expense expense) {
+        expense.getSplitDetails().values().removeIf(Objects::isNull);
         switch (expense.getSplitOption()) {
             case DEFAULT:
                 return splitBillsByDefault(expense.getAmount(), expense.getParticipants());

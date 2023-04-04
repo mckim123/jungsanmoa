@@ -14,10 +14,15 @@ public class SacrificialTransferPlanner implements TransferPlanner {
         if (roundedRemainings.isEmpty()) {
             return transfers;
         }
-
         Set<String> names = roundedRemainings.keySet();
         String sacrifice = names.stream().skip((int) (names.size() * Math.random())).findFirst().get();
 
+        if (roundedRemainings.values().stream().filter(value -> value > 0).count() == 1) {
+            sacrifice = roundedRemainings.entrySet().stream().filter(x -> x.getValue() > 0).findFirst().get().getKey();
+        }
+        if (roundedRemainings.values().stream().filter(value -> value < 0).count() == 1) {
+            sacrifice = roundedRemainings.entrySet().stream().filter(x -> x.getValue() < 0).findFirst().get().getKey();
+        }
         for (String name : names) {
             int remaining = roundedRemainings.get(name);
             if (sacrifice.equals(name)) {
