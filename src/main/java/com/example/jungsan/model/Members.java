@@ -3,6 +3,7 @@ package com.example.jungsan.model;
 import com.example.jungsan.dto.AdvanceTransfer;
 import com.example.jungsan.dto.SplitOption;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,5 +77,9 @@ public class Members {
             }
         }
         return roundedRemainings;
+    }
+
+    public void sort() {
+        members.sort(Comparator.comparing(Member::getName));
     }
 }
