@@ -1,5 +1,7 @@
 package com.example.jungsan.util;
 
+import static com.example.jungsan.util.MathUtils.roundToThreeDecimalPlaces;
+
 import com.example.jungsan.dto.Expense;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +41,7 @@ public class BillSplitter {
     public static Map<String, Double> splitBillsByDefault(int amount, List<String> participants) {
         Map<String, Double> divisions = new HashMap<>();
         double result = (double) amount / participants.size();
-        Double division = Math.round(result * 1000) / 1000.0;
+        Double division = roundToThreeDecimalPlaces(result);
         participants.forEach(name -> divisions.put(name, division));
         return divisions;
     }
@@ -47,7 +49,7 @@ public class BillSplitter {
     public static Map<String, Double> splitBillsAlreadyDone(int amount, List<String> participants) {
         Map<String, Double> divisions = new HashMap<>();
         double result = (double) amount / participants.size();
-        Double division = Math.round(result * 1000) / 1000.0;
+        Double division = roundToThreeDecimalPlaces(result);
         participants.forEach(name -> divisions.put(name, division));
         return divisions;
     }
@@ -62,7 +64,8 @@ public class BillSplitter {
         }
         double unit = (double) amount / total;
         for (String participant : participants) {
-            Double division = Math.round(splitDetails.get(participant) * 1000 * unit) / 1000.0;
+            double result = unit * splitDetails.get(participant);
+            Double division = roundToThreeDecimalPlaces(result);
             divisions.put(participant, division);
         }
         return divisions;
@@ -74,7 +77,7 @@ public class BillSplitter {
         participants.forEach(name -> splitDetails.putIfAbsent(name, 0d));
         double total = splitDetails.values().stream().reduce(0d, Double::sum);
         double result = (amount + total) / participants.size();
-        Double division = Math.round(result * 1000) / 1000.0;
+        Double division = roundToThreeDecimalPlaces(result);
         participants.forEach(name -> divisions.put(name, division + splitDetails.get(name)));
         return divisions;
     }
@@ -95,7 +98,7 @@ public class BillSplitter {
         List<String> lefts = participants.stream().filter(name -> !splitDetails.containsKey(name))
                 .collect(Collectors.toList());
         double result = (amount - total) / lefts.size();
-        Double division = Math.round(result * 1000) / 1000.0;
+        Double division = roundToThreeDecimalPlaces(result);
         lefts.forEach(name -> divisions.put(name, division));
         return divisions;
     }
@@ -108,10 +111,10 @@ public class BillSplitter {
             throw new IllegalArgumentException();
         }
         int withoutDrink = (amount - drinkAmount) / participants.size();
-        double withoutDrinkDivision = Math.round(withoutDrink * 1000) / 1000.0;
+        double withoutDrinkDivision = roundToThreeDecimalPlaces(withoutDrink);
 
         int drink = drinkAmount / drunken.size();
-        double withDrinkDivision = Math.round((withoutDrink + drink) * 1000) / 1000.0;
+        double withDrinkDivision = roundToThreeDecimalPlaces(withoutDrink + drink);
 
         for (String name : participants) {
             if (drunken.contains(name)) {
