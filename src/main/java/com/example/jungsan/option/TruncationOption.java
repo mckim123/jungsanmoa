@@ -1,4 +1,4 @@
-package com.example.jungsan.dto;
+package com.example.jungsan.option;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

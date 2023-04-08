@@ -1,4 +1,4 @@
-package com.example.jungsan.dto;
+package com.example.jungsan.model;
 
 import lombok.Getter;
 import lombok.NonNull;

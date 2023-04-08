@@ -1,9 +1,8 @@
 package com.example.jungsan.model;
 
-import com.example.jungsan.dto.Transfer;
-import com.example.jungsan.dto.TruncationOption;
 import com.example.jungsan.dto.request.ExpenseRequest;
 import com.example.jungsan.dto.request.JungsanRequest;
+import com.example.jungsan.option.TruncationOption;
 import com.example.jungsan.transferplanner.TransferPlanner;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JungsanReport {
     private final Members members;
-    private final List<ExpenseDetail> expenseDetails = new ArrayList<>();
+    private final List<Expense> expenses = new ArrayList<>();
     private List<Transfer> advanceTransfers;
     private List<Transfer> transfers;
 
@@ -28,21 +27,21 @@ public class JungsanReport {
 
     public void fill(JungsanRequest request) {
         addExpenses(request.getExpenses());
-        this.advanceTransfers = request.getAdvanceTransfers();
+        advanceTransfers = request.getAdvanceTransfers();
         applyAdvancedTransfers();
         roundRemainings(request.getTruncationOption());
         determineTransfers();
         members.sort();
     }
 
-    private void addExpenses(List<ExpenseRequest> expens) {
-        expens.forEach(this::addExpense);
+    private void addExpenses(List<ExpenseRequest> expenseRequests) {
+        expenseRequests.forEach(this::addExpense);
     }
 
     private void addExpense(ExpenseRequest expenseRequest) {
-        ExpenseDetail expenseDetail = new ExpenseDetail(expenseRequest);
-        expenseDetails.add(expenseDetail);
-        members.applyExpenseDetail(expenseDetail);
+        Expense expense = new Expense(expenseRequest);
+        expenses.add(expense);
+        members.applyExpenseDetail(expense);
     }
 
     private void applyAdvancedTransfers() {
