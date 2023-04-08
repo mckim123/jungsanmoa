@@ -1,6 +1,6 @@
 package com.example.jungsan.controller;
 
-import com.example.jungsan.dto.JungsanRequest;
+import com.example.jungsan.dto.request.JungsanRequest;
 import com.example.jungsan.model.JungsanReport;
 import com.example.jungsan.service.JungsanService;
 import lombok.RequiredArgsConstructor;
