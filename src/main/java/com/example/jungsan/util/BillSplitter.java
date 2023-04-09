@@ -2,7 +2,7 @@ package com.example.jungsan.util;
 
 import static com.example.jungsan.util.MathUtils.roundToThreeDecimalPlaces;
 
-import com.example.jungsan.dto.Expense;
+import com.example.jungsan.model.Expense;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,27 +11,28 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BillSplitter {
-    public static Map<String, Double> splitBills(Expense expense) {
-        expense.getSplitDetails().values().removeIf(Objects::isNull);
-        switch (expense.getSplitOption()) {
+    public static Map<String, Double> splitBills(Expense expenseRequest) {
+        expenseRequest.getSplitDetails().values().removeIf(Objects::isNull);
+        switch (expenseRequest.getSplitOption()) {
             case DEFAULT:
-                return splitBillsByDefault(expense.getAmount(), expense.getParticipants());
+                return splitBillsByDefault(expenseRequest.getAmount(), expenseRequest.getParticipants());
             case DONE:
-                return splitBillsAlreadyDone(expense.getAmount(), expense.getParticipants());
+                return splitBillsAlreadyDone(expenseRequest.getAmount(), expenseRequest.getParticipants());
             case RATE_CHANGE:
-                return splitBillsRateChanged(expense.getAmount(), expense.getParticipants(), expense.getSplitDetails());
+                return splitBillsRateChanged(expenseRequest.getAmount(), expenseRequest.getParticipants(),
+                        expenseRequest.getSplitDetails());
             case VALUE_CHANGE:
-                return splitBillsValueChanged(expense.getAmount(), expense.getParticipants(),
-                        expense.getSplitDetails());
+                return splitBillsValueChanged(expenseRequest.getAmount(), expenseRequest.getParticipants(),
+                        expenseRequest.getSplitDetails());
             case SET_DIVISION:
-                return splitBillsWithFixedValue(expense.getAmount(), expense.getParticipants(),
-                        expense.getSplitDetails());
+                return splitBillsWithFixedValue(expenseRequest.getAmount(), expenseRequest.getParticipants(),
+                        expenseRequest.getSplitDetails());
             case DRINK_SEPARATE:
-                return splitBillsWithSeparateDrinks(expense.getAmount(), expense.getParticipants(),
-                        expense.getSplitDetails(),
-                        expense.getDrinkAmount());
+                return splitBillsWithSeparateDrinks(expenseRequest.getAmount(), expenseRequest.getParticipants(),
+                        expenseRequest.getSplitDetails(),
+                        expenseRequest.getDrinkAmount());
             case TREAT:
-                return splitBillsWhenTreated(expense.getAmount(), expense.getPayer());
+                return splitBillsWhenTreated(expenseRequest.getAmount(), expenseRequest.getPayer());
             default:
                 throw new AssertionError();
         }
@@ -76,7 +77,7 @@ public class BillSplitter {
         Map<String, Double> divisions = new HashMap<>();
         participants.forEach(name -> splitDetails.putIfAbsent(name, 0d));
         double total = splitDetails.values().stream().reduce(0d, Double::sum);
-        double result = (amount + total) / participants.size();
+        double result = (amount - total) / participants.size();
         Double division = roundToThreeDecimalPlaces(result);
         participants.forEach(name -> divisions.put(name, division + splitDetails.get(name)));
         return divisions;
