@@ -1,20 +1,22 @@
 import React, {useState} from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import Grid from '@mui/material/Grid';
+import {
+    Button,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    Radio,
+    RadioGroup,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow
+} from "@mui/material";
 
 import html2canvas from 'html2canvas';
 
 function JungsanReport({data}) {
-    const {members, expenseDetails, advanceTransfers, transfers} = data;
+    const {members, expenseResponses, advanceTransfers, transfers} = data;
     const [showDetails, setShowDetails] = useState(false);
     const [showExpenseDetails, setShowExpenseDetails] = useState(false);
     const [selectedMembers, setSelectedMembers] = useState(new Set());
@@ -57,7 +59,7 @@ function JungsanReport({data}) {
                 <TableHead>
                     <TableRow style={{backgroundColor: '#efefef'}}>
                         <TableCell style={{width: '10%', textAlign: 'center'}}></TableCell>
-                        {members.members.map((member) => (
+                        {members.map((member) => (
                             <TableCell
                                 key={member.name}
                                 style={{
@@ -75,35 +77,35 @@ function JungsanReport({data}) {
                         <>
                             <TableRow>
                                 <TableCell style={{textAlign: 'center'}}>지불한 금액</TableCell>
-                                {members.members.map((member) => (
+                                {members.map((member) => (
                                     <TableCell style={{textAlign: 'center'}}
                                                key={member.name}>{member.totalActualPayment.toLocaleString()}</TableCell>
                                 ))}
                             </TableRow>
                             <TableRow>
                                 <TableCell style={{textAlign: 'center'}}>분담 금액</TableCell>
-                                {members.members.map((member) => (
+                                {members.map((member) => (
                                     <TableCell style={{textAlign: 'center'}}
                                                key={member.name}>{member.totalActualDivision.toLocaleString()}</TableCell>
                                 ))}
                             </TableRow>
                             <TableRow>
                                 <TableCell style={{textAlign: 'center'}}>송금한 금액</TableCell>
-                                {members.members.map((member) => (
+                                {members.map((member) => (
                                     <TableCell style={{textAlign: 'center'}}
                                                key={member.name}>{member.totalAdvancedTransfer.toLocaleString()}</TableCell>
                                 ))}
                             </TableRow>
                             <TableRow>
                                 <TableCell style={{textAlign: 'center'}}>미리 받은 금액</TableCell>
-                                {members.members.map((member) => (
+                                {members.map((member) => (
                                     <TableCell style={{textAlign: 'center'}}
                                                key={member.name}>{member.totalAdvancedReceived.toLocaleString()}</TableCell>
                                 ))}
                             </TableRow>
                             <TableRow>
                                 <TableCell style={{textAlign: 'center'}}>최종 보낼 금액</TableCell>
-                                {members.members.map((member) => (
+                                {members.map((member) => (
                                     <TableCell style={{textAlign: 'center'}}
                                                key={member.name}>{member.remaining.toLocaleString()}</TableCell>
                                 ))}
@@ -113,7 +115,7 @@ function JungsanReport({data}) {
                     )}
                     <TableRow>
                         <TableCell style={{textAlign: 'center'}}>반올림 금액</TableCell>
-                        {members.members.map((member) => (
+                        {members.map((member) => (
                             <TableCell style={{textAlign: 'center'}}
                                        key={member.name}>{member.roundedRemaining.toLocaleString()}</TableCell>
                         ))}
@@ -137,7 +139,7 @@ function JungsanReport({data}) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {expenseDetails.map((expense, index) => (
+                        {expenseResponses.map((expense, index) => (
                             <TableRow key={index}>
                                 <TableCell style={{textAlign: 'center'}}>{expense.payer}</TableCell>
                                 <TableCell style={{textAlign: 'center'}}>{expense.participants.join(', ')}</TableCell>
@@ -182,7 +184,7 @@ function JungsanReport({data}) {
                         onChange={handleRadioChange}
                     >
                         <FormControlLabel value="all" control={<Radio/>} label="전체"/>
-                        {members.members.map((member) => (
+                        {members.map((member) => (
                             <FormControlLabel
                                 key={member.name}
                                 value={member.name}
