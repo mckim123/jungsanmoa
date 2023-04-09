@@ -1,7 +1,6 @@
 package com.example.jungsan.model;
 
-import com.example.jungsan.dto.AdvanceTransfer;
-import com.example.jungsan.dto.SplitOption;
+import com.example.jungsan.option.SplitOption;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,37 +20,37 @@ public class Members {
         Collections.shuffle(members);
     }
 
-    public void applyExpenseDetail(ExpenseDetail expenseDetail) {
-        List<String> participants = expenseDetail.getParticipants();
-        Map<String, Double> divisions = expenseDetail.getDivisions();
+    public void applyExpenseDetail(Expense expense) {
+        Map<String, Double> divisions = expense.getDivisions();
+        List<String> participants = expense.getParticipants();
         for (Member member : members) {
             String name = member.getName();
-            if (expenseDetail.getPayer().equals(name)) {
-                member.addActualPayment(expenseDetail.getAmount());
-                if (SplitOption.DONE.equals(expenseDetail.getSplitOption())) {
+            if (expense.getPayer().equals(name)) {
+                member.addActualPayment(expense.getAmount());
+                if (SplitOption.DONE.equals(expense.getSplitOption())) {
                     member.addAdvancedReceived(divisions.get(name) * (divisions.size() - 1));
                 }
-                if (SplitOption.TREAT.equals(expenseDetail.getSplitOption())) {
-                    member.addActualDivision(expenseDetail.getAmount());
+                if (SplitOption.TREAT.equals(expense.getSplitOption())) {
+                    member.addActualDivision(expense.getAmount());
                 }
             }
-            if (participants.contains(name) && !SplitOption.TREAT.equals(expenseDetail.getSplitOption())) {
+            if (participants.contains(name) && !SplitOption.TREAT.equals(expense.getSplitOption())) {
                 member.addActualDivision(divisions.get(name));
-                if (SplitOption.DONE.equals(expenseDetail.getSplitOption()) && !expenseDetail.getPayer().equals(name)) {
+                if (SplitOption.DONE.equals(expense.getSplitOption()) && !expense.getPayer().equals(name)) {
                     member.addAdvancedTransfer(divisions.get(name));
                 }
             }
         }
     }
 
-    public void applyAdvancedTransfer(AdvanceTransfer advanceTransfer) {
+    public void applyAdvancedTransfer(Transfer advanceTransfer) {
         int amount = advanceTransfer.getAmount();
         for (Member member : members) {
             String name = member.getName();
-            if (advanceTransfer.from(name)) {
+            if (advanceTransfer.isFrom(name)) {
                 member.addAdvancedTransfer(amount);
             }
-            if (advanceTransfer.to(name)) {
+            if (advanceTransfer.isTo(name)) {
                 member.addAdvancedReceived(amount);
             }
         }

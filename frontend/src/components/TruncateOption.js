@@ -1,17 +1,5 @@
 import React from "react";
 import {Button, FormControl, InputLabel, MenuItem, Select} from "@mui/material";
-import {styled} from "@mui/material/styles";
-
-const StyledTruncateOptionButton = styled(Button)({
-    fontSize: "1rem",
-    backgroundColor: "#009688",
-    color: "white",
-    border: "none",
-    cursor: "pointer",
-    "&:hover": {
-        backgroundColor: "#689F38",
-    },
-});
 
 function TruncateOption(props) {
     const [value, setValue] = React.useState("ONE");
@@ -39,9 +27,9 @@ function TruncateOption(props) {
                 </Select>
             </FormControl>
             <span style={{margin: "1rem"}}> 원 단위로 </span>
-            <StyledTruncateOptionButton onClick={handleSubmit}>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
                 정산하기
-            </StyledTruncateOptionButton>
+            </Button>
         </div>
     );
 }

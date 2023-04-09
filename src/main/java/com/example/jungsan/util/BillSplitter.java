@@ -1,6 +1,8 @@
 package com.example.jungsan.util;
 
-import com.example.jungsan.dto.Expense;
+import static com.example.jungsan.util.MathUtils.roundToThreeDecimalPlaces;
+
+import com.example.jungsan.model.Expense;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,27 +11,28 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BillSplitter {
-    public static Map<String, Double> splitBills(Expense expense) {
-        expense.getSplitDetails().values().removeIf(Objects::isNull);
-        switch (expense.getSplitOption()) {
+    public static Map<String, Double> splitBills(Expense expenseRequest) {
+        expenseRequest.getSplitDetails().values().removeIf(Objects::isNull);
+        switch (expenseRequest.getSplitOption()) {
             case DEFAULT:
-                return splitBillsByDefault(expense.getAmount(), expense.getParticipants());
+                return splitBillsByDefault(expenseRequest.getAmount(), expenseRequest.getParticipants());
             case DONE:
-                return splitBillsAlreadyDone(expense.getAmount(), expense.getParticipants());
+                return splitBillsAlreadyDone(expenseRequest.getAmount(), expenseRequest.getParticipants());
             case RATE_CHANGE:
-                return splitBillsRateChanged(expense.getAmount(), expense.getParticipants(), expense.getSplitDetails());
+                return splitBillsRateChanged(expenseRequest.getAmount(), expenseRequest.getParticipants(),
+                        expenseRequest.getSplitDetails());
             case VALUE_CHANGE:
-                return splitBillsValueChanged(expense.getAmount(), expense.getParticipants(),
-                        expense.getSplitDetails());
+                return splitBillsValueChanged(expenseRequest.getAmount(), expenseRequest.getParticipants(),
+                        expenseRequest.getSplitDetails());
             case SET_DIVISION:
-                return splitBillsWithFixedValue(expense.getAmount(), expense.getParticipants(),
-                        expense.getSplitDetails());
+                return splitBillsWithFixedValue(expenseRequest.getAmount(), expenseRequest.getParticipants(),
+                        expenseRequest.getSplitDetails());
             case DRINK_SEPARATE:
-                return splitBillsWithSeparateDrinks(expense.getAmount(), expense.getParticipants(),
-                        expense.getSplitDetails(),
-                        expense.getDrinkAmount());
+                return splitBillsWithSeparateDrinks(expenseRequest.getAmount(), expenseRequest.getParticipants(),
+                        expenseRequest.getSplitDetails(),
+                        expenseRequest.getDrinkAmount());
             case TREAT:
-                return splitBillsWhenTreated(expense.getAmount(), expense.getPayer());
+                return splitBillsWhenTreated(expenseRequest.getAmount(), expenseRequest.getPayer());
             default:
                 throw new AssertionError();
         }
@@ -39,7 +42,7 @@ public class BillSplitter {
     public static Map<String, Double> splitBillsByDefault(int amount, List<String> participants) {
         Map<String, Double> divisions = new HashMap<>();
         double result = (double) amount / participants.size();
-        Double division = Math.round(result * 1000) / 1000.0;
+        Double division = roundToThreeDecimalPlaces(result);
         participants.forEach(name -> divisions.put(name, division));
         return divisions;
     }
@@ -47,7 +50,7 @@ public class BillSplitter {
     public static Map<String, Double> splitBillsAlreadyDone(int amount, List<String> participants) {
         Map<String, Double> divisions = new HashMap<>();
         double result = (double) amount / participants.size();
-        Double division = Math.round(result * 1000) / 1000.0;
+        Double division = roundToThreeDecimalPlaces(result);
         participants.forEach(name -> divisions.put(name, division));
         return divisions;
     }
@@ -62,7 +65,8 @@ public class BillSplitter {
         }
         double unit = (double) amount / total;
         for (String participant : participants) {
-            Double division = Math.round(splitDetails.get(participant) * 1000 * unit) / 1000.0;
+            double result = unit * splitDetails.get(participant);
+            Double division = roundToThreeDecimalPlaces(result);
             divisions.put(participant, division);
         }
         return divisions;
@@ -73,8 +77,8 @@ public class BillSplitter {
         Map<String, Double> divisions = new HashMap<>();
         participants.forEach(name -> splitDetails.putIfAbsent(name, 0d));
         double total = splitDetails.values().stream().reduce(0d, Double::sum);
-        double result = (amount + total) / participants.size();
-        Double division = Math.round(result * 1000) / 1000.0;
+        double result = (amount - total) / participants.size();
+        Double division = roundToThreeDecimalPlaces(result);
         participants.forEach(name -> divisions.put(name, division + splitDetails.get(name)));
         return divisions;
     }
@@ -95,7 +99,7 @@ public class BillSplitter {
         List<String> lefts = participants.stream().filter(name -> !splitDetails.containsKey(name))
                 .collect(Collectors.toList());
         double result = (amount - total) / lefts.size();
-        Double division = Math.round(result * 1000) / 1000.0;
+        Double division = roundToThreeDecimalPlaces(result);
         lefts.forEach(name -> divisions.put(name, division));
         return divisions;
     }
@@ -108,10 +112,10 @@ public class BillSplitter {
             throw new IllegalArgumentException();
         }
         int withoutDrink = (amount - drinkAmount) / participants.size();
-        double withoutDrinkDivision = Math.round(withoutDrink * 1000) / 1000.0;
+        double withoutDrinkDivision = roundToThreeDecimalPlaces(withoutDrink);
 
         int drink = drinkAmount / drunken.size();
-        double withDrinkDivision = Math.round((withoutDrink + drink) * 1000) / 1000.0;
+        double withDrinkDivision = roundToThreeDecimalPlaces(withoutDrink + drink);
 
         for (String name : participants) {
             if (drunken.contains(name)) {

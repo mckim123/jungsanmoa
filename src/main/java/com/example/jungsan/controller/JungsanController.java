@@ -1,7 +1,7 @@
 package com.example.jungsan.controller;
 
-import com.example.jungsan.dto.JungsanRequest;
-import com.example.jungsan.model.JungsanReport;
+import com.example.jungsan.dto.request.JungsanRequest;
+import com.example.jungsan.dto.response.JungsanResponse;
 import com.example.jungsan.service.JungsanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -28,8 +28,8 @@ public class JungsanController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<JungsanReport> calculate(@RequestBody JungsanRequest request) {
-        JungsanReport report = jungsanService.produceReport(request);
+    public ResponseEntity<JungsanResponse> calculate(@RequestBody JungsanRequest request) {
+        JungsanResponse report = jungsanService.process(request);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(report);
     }
 }

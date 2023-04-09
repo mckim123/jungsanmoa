@@ -1,5 +1,7 @@
 package com.example.jungsan.model;
 
+import static com.example.jungsan.util.MathUtils.roundToTwoDecimalPlaces;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +34,7 @@ public class Member {
 
     public double calculateRemaining() {
         remaining = totalActualDivision - totalActualPayment - totalAdvancedTransfer + totalAdvancedReceived;
-        remaining = Math.round(remaining * 100) / 100.0;
+        remaining = roundToTwoDecimalPlaces(remaining);
         return remaining;
     }
 
