@@ -40,6 +40,7 @@ public class JungsanReport {
 
     private void addExpense(ExpenseRequest expenseRequest) {
         Expense expense = new Expense(expenseRequest);
+        expense.splitBills();
         expenses.add(expense);
         members.applyExpenseDetail(expense);
     }
@@ -89,5 +90,9 @@ public class JungsanReport {
 
     private void determineTransfers() {
         transfers = transferPlanner.plan(members.getRoundedRemainings());
+    }
+
+    public List<Member> getMembers() {
+        return members.getMembers();
     }
 }

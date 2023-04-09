@@ -1,6 +1,6 @@
 package com.example.jungsan.dto.request;
 
-import com.example.jungsan.dto.SplitOption;
+import com.example.jungsan.option.SplitOption;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ public class ExpenseRequest {
 
     @NonNull
     private String payer;
-    private String title;
+    private String description;
     private int amount;
     @NonNull
     private SplitOption splitOption;

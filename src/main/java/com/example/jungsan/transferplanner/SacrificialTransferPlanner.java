@@ -1,6 +1,6 @@
 package com.example.jungsan.transferplanner;
 
-import com.example.jungsan.dto.Transfer;
+import com.example.jungsan.model.Transfer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

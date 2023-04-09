@@ -24,7 +24,7 @@ public class Expense {
         this.participants = expenseRequest.getParticipants();
         this.payer = expenseRequest.getPayer();
         this.amount = expenseRequest.getAmount();
-        this.description = expenseRequest.getTitle();
+        this.description = expenseRequest.getDescription();
         this.splitOption = expenseRequest.getSplitOption();
         this.splitDetails = expenseRequest.getSplitDetails();
         this.drinkAmount = expenseRequest.getDrinkAmount();

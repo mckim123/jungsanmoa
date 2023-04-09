@@ -21,16 +21,7 @@ public class Members {
     }
 
     public void applyExpenseDetail(Expense expense) {
-        expense.splitBills();
         Map<String, Double> divisions = expense.getDivisions();
-        //        Map<String, Double> divisions = expense.getDivisions();
-        //        for (Member member : members) {
-        //            String name = member.getName();
-        //            if (divisions.containsKey(name)) {
-        //                member.addExpense(expense.getPayer(), divisions.get(name));
-        //            }
-        //        }
-
         List<String> participants = expense.getParticipants();
         for (Member member : members) {
             String name = member.getName();

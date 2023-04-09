@@ -17,6 +17,6 @@ public class JungsanService {
         Members members = new Members(request.getMemberNames());
         JungsanReport report = new JungsanReport(members, transferPlanner);
         report.fill(request);
-        return JungsanResponse.of(report);
+        return JungsanResponse.from(report);
     }
 }
