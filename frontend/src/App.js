@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import axios from "axios";
-import {CssBaseline, Divider, Typography, useMediaQuery,} from "@mui/material";
+import {Alert, CssBaseline, Divider, Snackbar, Typography, useMediaQuery} from "@mui/material";
 import {styled} from "@mui/material/styles";
 import {useTheme} from "@mui/system";
+
 import Members from "./components/Members";
 import ExpenseInput from "./components/ExpenseInput";
 import TruncateOption from "./components/TruncateOption";
@@ -77,6 +78,7 @@ function App() {
     const [expenseInputs, setExpenseInputs] = React.useState([]);
     const [truncateOption, setTruncateOption] = React.useState("ONE");
     const [jungsanData, setJungsanData] = useState(null);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const handleAddMember = (newMember) => {
         if (newMember && members.indexOf(newMember) === -1) {
@@ -98,11 +100,18 @@ function App() {
         return amount > 0 && payer !== "" && participants.length > 0;
     };
 
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpenSnackbar(false);
+    };
+
     const handleSubmit = (value) => {
         const invalidExpense = expenseInputs.find((expense) => !isValidExpense(expense));
 
         if (invalidExpense) {
-            alert("지출 항목에 유효하지 않은 값이 있습니다. 확인 후 다시 시도해주세요.");
+            setOpenSnackbar(true);
             return;
         }
 
@@ -122,8 +131,6 @@ function App() {
             default:
                 truncationValue = 1;
         }
-        console.log(totalAmount);
-        console.log(truncationValue);
 
         if (totalAmount % truncationValue !== 0) {
             alert("금액의 총합은 정산단위로 나누어떨어져야합니다.");
@@ -139,12 +146,11 @@ function App() {
             truncationOption: value,
             advanceTransfers: [],
         };
-        console.log(data);
 
         axios
-            .post(LOCAL_API_ENDPOINT, data)
+            //.post(LOCAL_API_ENDPOINT, data)
+            .post(API_ENDPOINT, data)
             .then((response) => {
-                console.log(response);
                 setJungsanData(response.data);
             })
             .catch((error) => {
@@ -175,6 +181,17 @@ function App() {
                     </>
                 )}
             </AppContainer>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={3000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{vertical: "top", horizontal: "center"}}
+            >
+                <Alert severity="error" sx={{width: "100%"}}>
+                    지출 항목에 유효하지 않은 값이 있습니다. 확인 후 다시 시도해주세요.
+                </Alert>
+
+            </Snackbar>
         </React.Fragment>
     );
 }
