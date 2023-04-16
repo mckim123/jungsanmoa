@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 public class BillSplitter {
     public static Map<String, Double> splitBills(Expense expenseRequest) {
         expenseRequest.getSplitDetails().values().removeIf(Objects::isNull);
+        if (expenseRequest.getParticipants().size() == 0) {
+            throw new IllegalArgumentException();
+        }
         switch (expenseRequest.getSplitOption()) {
             case DEFAULT:
                 return splitBillsByDefault(expenseRequest.getAmount(), expenseRequest.getParticipants());
@@ -111,10 +114,10 @@ public class BillSplitter {
         if (drunken.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        int withoutDrink = (amount - drinkAmount) / participants.size();
+        double withoutDrink = (double) (amount - drinkAmount) / participants.size();
         double withoutDrinkDivision = roundToThreeDecimalPlaces(withoutDrink);
 
-        int drink = drinkAmount / drunken.size();
+        double drink = (double) drinkAmount / drunken.size();
         double withDrinkDivision = roundToThreeDecimalPlaces(withoutDrink + drink);
 
         for (String name : participants) {
@@ -127,7 +130,7 @@ public class BillSplitter {
         return divisions;
     }
 
-    private static Map<String, Double> splitBillsWhenTreated(int amount, String payer) {
+    public static Map<String, Double> splitBillsWhenTreated(int amount, String payer) {
         Map<String, Double> divisions = new HashMap<>();
         divisions.put(payer, (double) amount);
         return divisions;
