@@ -1,7 +1,12 @@
 package com.example.jungsan.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import com.example.jungsan.dto.request.ExpenseRequest;
+import com.example.jungsan.model.Expense;
+import com.example.jungsan.option.SplitOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +36,19 @@ class BillSplitterTest {
     }
 
     @Test
-    @DisplayName("")
-    void splitBillsTest() {
+    @DisplayName("분담 인원이 0명 이하이거나, 분담 금액이 0원 미만인 경우 예외를 던진다.")
+    void splitBillsFailTest() {
+        ExpenseRequest request1 = new ExpenseRequest("A", null, 10000, SplitOption.DEFAULT, null, new ArrayList<>(), 0);
+        ExpenseRequest request2 = new ExpenseRequest("A", null, -10000, SplitOption.DEFAULT, null, participants, 0);
 
+        Expense expense1 = new Expense(request1);
+        Expense expense2 = new Expense(request2);
+
+        assertThatThrownBy(() -> BillSplitter.splitBills(expense1))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        assertThatThrownBy(() -> BillSplitter.splitBills(expense2))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -75,6 +90,16 @@ class BillSplitterTest {
         assertThat(divisions).isEqualTo(expectedResult2);
     }
 
+    @Test
+    @DisplayName("RATE CHANGE 방식일 때 음수의 비율을 지정할 수 없다.")
+    void splitBillsRateChangedFailTest() {
+        Map<String, Double> splitDetails = new HashMap<>();
+        splitDetails.put("A", -1.0);
+        splitDetails.put("B", 1.0);
+
+        assertThatThrownBy(() -> BillSplitter.splitBillsRateChanged(amount, participants, splitDetails))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 
     @Test
     @DisplayName("VALUE CHANGE 방식일 때 분담 금액을 정확히 나눈다.")
@@ -123,6 +148,21 @@ class BillSplitterTest {
 
         divisions = BillSplitter.splitBillsWithFixedValue(amount, participants, splitDetails2);
         assertThat(divisions).isEqualTo(expectedResult2);
+    }
+
+    @Test
+    @DisplayName("FIXED VALUE 방식일 때, participants의 인원과 splitDetails의 인원이 같은 경우 총액이 맞지 않으면 예외를 발생시킨다.")
+    void splitBillsWithFixedValueFailTest() {
+        Map<String, Double> splitDetails = new HashMap<>();
+        splitDetails.put("A", 10000.0);
+        splitDetails.put("B", 10000.0);
+        splitDetails.put("C", 10000.0);
+        splitDetails.put("D", 10000.0);
+        splitDetails.put("E", 10000.0);
+        splitDetails.put("F", 10000.0);
+
+        assertThatThrownBy(() -> BillSplitter.splitBillsWithFixedValue(amount, participants, splitDetails))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

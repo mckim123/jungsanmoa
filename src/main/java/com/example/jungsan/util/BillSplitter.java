@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 
 public class BillSplitter {
     public static Map<String, Double> splitBills(Expense expenseRequest) {
-        expenseRequest.getSplitDetails().values().removeIf(Objects::isNull);
-        if (expenseRequest.getParticipants().size() == 0) {
-            throw new IllegalArgumentException();
+        if (expenseRequest.getSplitDetails() != null) {
+            expenseRequest.getSplitDetails().values().removeIf(Objects::isNull);
         }
+        validate(expenseRequest);
         switch (expenseRequest.getSplitOption()) {
             case DEFAULT:
                 return splitBillsByDefault(expenseRequest.getAmount(), expenseRequest.getParticipants());
@@ -41,6 +41,15 @@ public class BillSplitter {
         }
     }
 
+    private static void validate(Expense expenseRequest) {
+        if (expenseRequest.getParticipants().size() == 0) {
+            throw new IllegalArgumentException();
+        }
+        if (expenseRequest.getAmount() < 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+
 
     public static Map<String, Double> splitBillsByDefault(int amount, List<String> participants) {
         Map<String, Double> divisions = new HashMap<>();
@@ -61,6 +70,9 @@ public class BillSplitter {
     public static Map<String, Double> splitBillsRateChanged(int amount, List<String> participants,
                                                             Map<String, Double> splitDetails) {
         Map<String, Double> divisions = new HashMap<>();
+        if (splitDetails.values().stream().anyMatch(value -> value < 0)) {
+            throw new IllegalArgumentException();
+        }
         participants.forEach(name -> splitDetails.putIfAbsent(name, 1d));
         double total = splitDetails.values().stream().reduce(0d, Double::sum);
         if (total == 0) {
